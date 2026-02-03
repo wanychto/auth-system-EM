@@ -7,7 +7,7 @@ from django.utils.deprecation import MiddlewareMixin
 class JWTAuthenticationMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
-        request.jwt_user = None  # ← ВАЖНО
+        request.jwt_user = None  
 
         auth_header = request.headers.get("Authorization")
         if not auth_header or not auth_header.startswith("Bearer "):
