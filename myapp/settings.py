@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +29,9 @@ DEBUG = os.environ.get("DEBUG", False)
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS","127.0.0.1").split(",")
 
-
+JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY") 
+JWT_ALGORITHM = 'HS256'
+JWT_EXPIRATION_DELTA = timedelta(hours=1)
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    'users',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'myapp.middleware.JWTAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'myapp.urls'
@@ -77,12 +83,12 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get("DATABASE_NAME"),
-        'USER': os.environ.get("DATABASE_USERNAME"),
-        'PASSWORD': os.environ.get("DATABASE_PASSWORD"),
-        'HOST': os.environ.get("DATABASE_HOST", 'pgdb'),
-        'PORT': os.environ.get("DATABASE_PORT", 5432),
-
+        'NAME': os.environ.get("DATABASE_NAME").strip(),
+        'USER':os.environ.get("DATABASE_USERNAME").strip(),
+        'PASSWORD': os.environ.get("DATABASE_PASSWORD").strip(),
+        'HOST': os.environ.get("DATABASE_HOST", '127.0.0.1').strip(),
+        'PORT': os.environ.get("DATABASE_PORT", '5432').strip(),
+        'OPTIONS':{"client_encoding":"UTF8"},
     }
 }
 
