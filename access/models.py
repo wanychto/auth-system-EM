@@ -19,7 +19,7 @@ class Business_elements(models.Model):
 
 class Access_rules(models.Model):
     role = models.ForeignKey(Roles, on_delete=models.CASCADE)
-    element_id = models.ForeignKey(Business_elements, on_delete=models.CASCADE)
+    element = models.ForeignKey(Business_elements, on_delete=models.CASCADE)
     read_permission = models.BooleanField(default=False)
     read_all_permission = models.BooleanField(default=False)
     create_permission = models.BooleanField(default=False)
